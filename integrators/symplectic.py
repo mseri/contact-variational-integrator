@@ -1,0 +1,124 @@
+import numpy as np
+
+from integrators.common import getsteps
+
+
+def euler(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+    """
+    Symplectic Euler integrator.
+    Defaults to the damped oscillator with damping factor a
+    """
+    steps = getsteps(tspan, h)
+    t0, _ = tspan
+
+    sol = np.empty([steps, 2], dtype=np.float64)
+    sol[0] = np.array(init)
+    for i in range(steps-1):
+        p, x = sol[i]
+        pnew = p + h*acc(x, p, t0+i*h, a)
+        xnew = x + h*pnew
+        sol[i+1] = np.array((pnew, xnew))
+
+    return sol
+
+
+def leapfrog(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+    """
+    Leapfrog integrator.
+    Defaults to the damped oscillator with damping factor a
+    """
+    steps = getsteps(tspan, h)
+    hsq = np.math.pow(h, 2)
+    t0, _ = tspan
+
+    sol = np.empty([steps, 2], dtype=np.float64)
+    sol[0] = np.array(init)
+    for i in range(steps-1):
+        p, x = sol[i]
+        xnew = x + h*p + hsq/2.0*acc(x, p, t0+i*h, a)
+        pnew = p + h*(acc(x, p, t0+i*h, a)+acc(xnew, p, t0+i*h, a))/2.0
+        sol[i+1] = np.array((pnew, xnew))
+
+    return sol
+
+
+# For the values used in the implementations below
+# see Candy-Rozmus (https://www.sciencedirect.com/science/article/pii/002199919190299Z)
+# and https://en.wikipedia.org/wiki/Symplectic_integrator
+def symint_step(init, acc, h, coeffs):
+    """
+    General symplectic integrator step with coefficients coeffs.
+    The parameter init contains the current p,q,t; acc is the acceleration; h is the step.
+    """
+    p, q, t = init
+    for ai, bi in coeffs.T:
+        p += bi * acc(q, p, t) * h
+        q += ai * p * h
+        t += ai * h
+    return p, q, t
+
+
+def symint(init, tspan, h, coeffs, acc):
+    """
+    General symplectic integrator with coefficients coeffs.
+    The parameter init contains the initial values for p and q; 
+    tspan contains the time span as a tuple; h is the time step;
+    acc is the acceleration.
+    """
+    steps = getsteps(tspan, h)
+
+    sol = np.empty([steps, 2], dtype=np.float64)
+    sol[0] = np.array(init)
+    t = tspan[0]
+    for i in range(steps-1):
+        p0, q0 = sol[i]
+        t += h
+        pnew, qnew, _ = symint_step((p0, q0, t), acc, h, coeffs)
+        sol[i+1] = np.array((pnew, qnew))
+    return sol
+
+
+cleapfrog = np.array([[0.5, 0.5], [0.0, 1.0]])
+cpseudoleapfrog = np.array([[1.0, 0.0], [0.5, 0.5]])
+cruth3 = np.array([[2.0/3.0, -2.0/3.0, 1.0], [7.0/24.0, 0.75, -1.0/24.0]])
+
+# Note: ruth4 seems to give poor results
+# see also the discussion at
+# https://scicomp.stackexchange.com/questions/20533/test-of-3rd-order-vs-4th-order-symplectic-integrator-with-strange-result
+c = np.math.pow(2.0, 1.0/3.0)
+cruth4 = np.array([[0.5, 0.5*(1.0-c), 0.5*(1.0-c), 0.5],
+                   [0.0, 1.0, -c, 1.0]]
+                  ) / (2.0 - c)
+
+
+def ruth3(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+    """
+    Integrate using the acceleration acc with damping factor a using Ruth3.
+    The acceleration defaults to the damped oscillator
+    """
+    return symint(init, tspan, h, cruth3, lambda x, p, t: acc(x, p, t, a))
+
+
+def ruth4(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+    """
+    Integrate using the acceleration acc with damping factor a using Ruth4.
+    The acceleration defaults to the damped oscillator
+    """
+    return symint(init, tspan, h, cruth4, lambda x, p, t: acc(x, p, t, a))
+
+
+def leapfrog2(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+    """
+    Integrate using the acceleration acc with damping factor a using Leapfrog.
+    The acceleration defaults to the damped oscillator
+    """
+    return symint(init, tspan, h, cleapfrog, lambda x, p, t: acc(x, p, t, a))
+
+
+def pseudoleapfrog(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+    """
+    Integrate using the acceleration acc with damping factor a using pseudo Leapfrog
+    in the sense of Candy, Rozmus.
+    The acceleration defaults to the damped oscillator
+    """
+    return symint(init, tspan, h, cpseudoleapfrog, lambda x, p, t: acc(x, p, t, a))
