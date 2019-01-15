@@ -25,21 +25,21 @@ def ruth3(init, tspan, a, h):
     return sym.ruth3(init, tspan, h, lambda x, p, t: -x-a*p)
 
 
-def ruth4(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def ruth4(init, tspan, a, h):
     """
     Integrate the damped oscillator with damping factor a using Ruth4.
     """
     return sym.ruth4(init, tspan, h, lambda x, p, t: -x-a*p)
 
 
-def leapfrog2(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def leapfrog2(init, tspan, a, h):
     """
     Integrate the damped oscillator with damping factor a using Leapfrog.
     """
     return sym.leapfrog2(init, tspan, h, lambda x, p, t: -x-a*p)
 
 
-def pseudoleapfrog(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def pseudoleapfrog(init, tspan, a, h):
     """
     Integrate the damped oscillator with damping factor a using pseudo Leapfrog
     in the sense of Candy, Rozmus.
