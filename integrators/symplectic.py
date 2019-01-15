@@ -3,10 +3,9 @@ import numpy as np
 from integrators.common import getsteps
 
 
-def euler(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def euler(init, tspan, h, acc):
     """
-    Symplectic Euler integrator.
-    Defaults to the damped oscillator with damping factor a
+    Symplectic Euler integrator
     """
     steps = getsteps(tspan, h)
     t0, _ = tspan
@@ -15,14 +14,14 @@ def euler(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        pnew = p + h*acc(x, p, t0+i*h, a)
+        pnew = p + h*acc(x, p, t0+i*h)
         xnew = x + h*pnew
         sol[i+1] = np.array((pnew, xnew))
 
     return sol
 
 
-def leapfrog(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def leapfrog(init, tspan, h, acc):
     """
     Leapfrog integrator.
     Defaults to the damped oscillator with damping factor a
@@ -35,8 +34,8 @@ def leapfrog(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        xnew = x + h*p + hsq/2.0*acc(x, p, t0+i*h, a)
-        pnew = p + h*(acc(x, p, t0+i*h, a)+acc(xnew, p, t0+i*h, a))/2.0
+        xnew = x + h*p + hsq/2.0*acc(x, p, t0+i*h)
+        pnew = p + h*(acc(x, p, t0+i*h)+acc(xnew, p, t0+i*h))/2.0
         sol[i+1] = np.array((pnew, xnew))
 
     return sol
@@ -91,34 +90,30 @@ cruth4 = np.array([[0.5, 0.5*(1.0-c), 0.5*(1.0-c), 0.5],
                   ) / (2.0 - c)
 
 
-def ruth3(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def ruth3(init, tspan, h, acc):
     """
-    Integrate using the acceleration acc with damping factor a using Ruth3.
-    The acceleration defaults to the damped oscillator
+    Integrate using the acceleration acc using Ruth3.
     """
-    return symint(init, tspan, h, cruth3, lambda x, p, t: acc(x, p, t, a))
+    return symint(init, tspan, h, cruth3, acc)
 
 
-def ruth4(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def ruth4(init, tspan, h, acc):
     """
-    Integrate using the acceleration acc with damping factor a using Ruth4.
-    The acceleration defaults to the damped oscillator
+    Integrate using the acceleration acc using Ruth4.
     """
-    return symint(init, tspan, h, cruth4, lambda x, p, t: acc(x, p, t, a))
+    return symint(init, tspan, h, cruth4, acc)
 
 
-def leapfrog2(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def leapfrog2(init, tspan, h, acc):
     """
-    Integrate using the acceleration acc with damping factor a using Leapfrog.
-    The acceleration defaults to the damped oscillator
+    Integrate using the acceleration acc using Leapfrog.
     """
-    return symint(init, tspan, h, cleapfrog, lambda x, p, t: acc(x, p, t, a))
+    return symint(init, tspan, h, cleapfrog, acc)
 
 
-def pseudoleapfrog(init, tspan, a, h, acc=lambda x, p, t, a: -x-a*p):
+def pseudoleapfrog(init, tspan, h, acc):
     """
-    Integrate using the acceleration acc with damping factor a using pseudo Leapfrog
+    Integrate using the acceleration acc sing pseudo Leapfrog
     in the sense of Candy, Rozmus.
-    The acceleration defaults to the damped oscillator
     """
-    return symint(init, tspan, h, cpseudoleapfrog, lambda x, p, t: acc(x, p, t, a))
+    return symint(init, tspan, h, cpseudoleapfrog, acc)
