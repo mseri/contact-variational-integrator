@@ -1,8 +1,38 @@
+import numpy as np
+
 import integrators.contact as con
 import integrators.symplectic as sym
 
 
+def forcing(beta, omega):
+    """
+    Forcing of the form beta*sin(omega*t)
+    """
+    return lambda t: beta*np.sin(omega*t)
+
+
+def reference(a, beta, omega):
+    """
+    Reference solution for damped oscilltor with sinusoidal forcing
+    """
+    phi = np.arctan2(a*omega, np.power(omega, 2)-1.0)
+    prefactor = - beta / \
+        np.sqrt(np.power(omega*a, 2) + np.power(1.0-np.power(omega, 2), 2))
+
+    return lambda t: prefactor*np.sin(omega*t + phi)
+
+def dreference(a, beta, omega):
+    """
+    Reference solution for damped oscilltor with sinusoidal forcing
+    """
+    phi = np.arctan2(a*omega, np.power(omega, 2)-1.0)
+    prefactor = - beta / \
+        np.sqrt(np.power(omega*a, 2) + np.power(1.0-np.power(omega, 2), 2))
+
+    return lambda t: prefactor*omega*np.cos(omega*t + phi)
+
 # Symplectic integrators
+
 
 def euler(init, tspan, a, beta, omega, h):
     """
@@ -54,17 +84,7 @@ def contact(init, tspan, a, beta, omega, h):
     Integrate the damped oscillator with damping factor a
     using the first order contact variational integrator.
     """
-    return con.contact(init, tspan, h, a, lambda t: 0)
-
-
-# Note: this is no longer discussed in the paper but is a
-#       straightforward modification of the arguments presented there.
-def midpoint(init, tspan, a, beta, omega, h):
-    """
-    Integrate the damped oscillator with damping factor a
-    using the first order midpoint contact variational integrator.
-    """
-    return con.midpoint(init, tspan, h, a)
+    return con.contact(init, tspan, h, a, forcing(beta, omega))
 
 
 def symcontact(init, tspan, a, beta, omega, h):
@@ -72,4 +92,4 @@ def symcontact(init, tspan, a, beta, omega, h):
     Integrate the damped oscillator with damping factor a
     using the second order contact variational integrator.
     """
-    return con.symcontact(init, tspan, h, a, lambda t: 0)
+    return con.symcontact(init, tspan, h, a, forcing(beta, omega))
