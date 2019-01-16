@@ -8,7 +8,7 @@ def getsteps(tspan, h):
     Given a timespan and a timestep h, return the number of steps.
     """
     t1, t2 = tspan
-    return math.floor((t2-t1)/h)
+    return int(math.floor((t2-t1)/h))
 
 
 def rk4(init, tspan, a, h):
