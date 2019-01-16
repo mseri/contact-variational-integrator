@@ -38,35 +38,40 @@ def euler(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Symplectic Euler.
     """
-    return sym.euler(init, tspan, h, lambda x, p, t: -x-a*p)
+    f = forcing(beta,omega)
+    return sym.euler(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
 def leapfrog(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Leapfrog.
     """
-    return sym.leapfrog(init, tspan, h, lambda x, p, t: -x-a*p)
+    f = forcing(beta,omega)
+    return sym.leapfrog(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
 def ruth3(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Ruth3.
     """
-    return sym.ruth3(init, tspan, h, lambda x, p, t: -x-a*p)
+    f = forcing(beta,omega)
+    return sym.ruth3(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
 def ruth4(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Ruth4.
     """
-    return sym.ruth4(init, tspan, h, lambda x, p, t: -x-a*p)
+    f = forcing(beta,omega)
+    return sym.ruth4(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
 def leapfrog2(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Leapfrog.
     """
-    return sym.leapfrog2(init, tspan, h, lambda x, p, t: -x-a*p)
+    f = forcing(beta,omega)
+    return sym.leapfrog2(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
 def pseudoleapfrog(init, tspan, a, beta, omega, h):
@@ -74,7 +79,8 @@ def pseudoleapfrog(init, tspan, a, beta, omega, h):
     Integrate the damped oscillator with damping factor a using pseudo Leapfrog
     in the sense of Candy, Rozmus.
     """
-    return sym.pseudoleapfrog(init, tspan, h, lambda x, p, t: -x-a*p)
+    f = forcing(beta,omega)
+    return sym.pseudoleapfrog(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
 # Contact integrators

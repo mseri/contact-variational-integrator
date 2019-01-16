@@ -35,7 +35,7 @@ def leapfrog(init, tspan, h, acc):
     for i in range(steps-1):
         p, x = sol[i]
         xnew = x + h*p + hsq/2.0*acc(x, p, t0+i*h)
-        pnew = p + h*(acc(x, p, t0+i*h)+acc(xnew, p, t0+i*h))/2.0
+        pnew = p + h*(acc(x, p, t0+i*h)+acc(xnew, p, t0+(i+1)*h))/2.0
         sol[i+1] = np.array((pnew, xnew))
 
     return sol
