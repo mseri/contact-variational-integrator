@@ -16,9 +16,10 @@ def contact(init, tspan, h, a, forcing):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        xnew = (h-hsq*a)*(p+forcing(t0+h*i)) + (1.0-hsq/2.0)*x
-        pnew = (1.0-h*a)*(p+forcing(t0+h*i)-forcing(t0+h*(i+1))) \
-            - h/2.0*(xnew + x)
+        xnew = (h-hsq*a)*p + (1.0-0.5*hsq)*x + 0.5*hsq*forcing(t0+h*i)
+        pnew = (1.0-h*a)*p + 0.5*h*(
+            forcing(t0+h*i) + forcing(t0+h*(i+1)) - x -  xnew
+        )
         sol[i+1] = np.array((pnew, xnew))
     return sol
 
@@ -37,8 +38,9 @@ def midpoint(init, tspan, h, a):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        xnew = (h - hsq*a)/(1.0 + hsq/4.0) * p + (1.0-hsq/4.0)/(1.0+hsq/4.0)*x
-        pnew = (xnew-x)/h - h/4.0*(x+xnew)
+        xnew = (h - hsq*a)/(1.0 + 0.25*hsq) * p \
+            + (1.0-0.25*hsq)/(1.0+0.25*hsq)*x
+        pnew = (xnew-x)/h - 0.25*h*(x+xnew)
         sol[i+1] = np.array((pnew, xnew))
     return sol
 
@@ -56,8 +58,9 @@ def symcontact(init, tspan, h, a, forcing):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        xnew = (h - hsq*a/2.0)*(p+forcing(t0+h*i)) + (1.0-hsq/2.0)*x
-        pnew = (1.0-h*a/2.0)/(1.0+h*a/2.0)*(p+forcing(t0+h*i)-forcing(t0+h*(i+1))) \
-            - h/2.0*(xnew + x)/(1.0+h*a/2.0)
+        xnew = (h - 0.5*hsq*a)*p + (1.0-0.5*hsq)*x + 0.5*hsq*forcing(t0+h*i)
+        pnew = (1.0-0.5*h*a)/(1.0 + 0.5*h*a)*p + 0.5*h*(
+            forcing(t0+h*i) + forcing(t0+h*(i+1)) - x - xnew
+        )/(1.0 + 0.5*h*a)
         sol[i+1] = np.array((pnew, xnew))
     return sol

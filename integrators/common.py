@@ -33,7 +33,7 @@ def rk4_forced(init, tspan, a, b, omega, h):
     t = np.arange(tspan[0], tspan[1], h)
 
     def derivs(x, t):
-        dp = -x[1] - a*x[0] - b*np.sin(omega*t)
+        dp = -x[1] - a*x[0] + b*np.sin(omega*t)
         dq = x[0]
         return (dp, dq)
     return plb.rk4(derivs, init, t)
