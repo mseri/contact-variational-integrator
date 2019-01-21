@@ -71,8 +71,7 @@ def symint(init, tspan, h, coeffs, acc):
     t = tspan[0]
     for i in range(steps-1):
         p0, q0 = sol[i]
-        t += h
-        pnew, qnew, _ = symint_step((p0, q0, t), acc, h, coeffs)
+        pnew, qnew, t = symint_step((p0, q0, t), acc, h, coeffs)
         sol[i+1] = np.array((pnew, qnew))
     return sol
 
