@@ -15,7 +15,7 @@ def leapfrog(init, tspan, a, h):
     """
     Integrate the damped oscillator with damping factor a using Leapfrog.
     """
-    return sym.leapfrog(init, tspan, h, lambda x, p, t: -x-a*p)
+    return sym.leapfrog_implicit(init, tspan, h, lambda x, p, t: -x-a*p)
 
 
 def ruth3(init, tspan, a, h):
