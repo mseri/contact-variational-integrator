@@ -55,11 +55,11 @@ def leapfrog_implicit(init, tspan, h, acc):
     for i in range(steps-1):
         p, x = sol[i]
         pint = so.fsolve(
-            lambda pint: p - pint + h*acc(x, pint, t0+i*h)/2.0,
+            lambda pint: p - pint + 0.5*h*acc(x, pint, t0+i*h),
             p
         )[0]
         xnew = x + h*pint
-        pnew = pint + h*acc(xnew, pint, t0+(i+1)*h)/2.0
+        pnew = pint + 0.5*h*acc(xnew, pint, t0+(i+1)*h)
         sol[i+1] = np.array((pnew, xnew))
 
     return sol
