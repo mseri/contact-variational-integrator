@@ -115,21 +115,21 @@ cruth4 = np.array([[0.5, 0.5*(1.0-c), 0.5*(1.0-c), 0.5],
 
 def ruth3(init, tspan, h, acc):
     """
-    Integrate using the acceleration acc using Ruth3.
+    Integrate using the acceleration acc using Ruth3 for separable Hamiltonians.
     """
     return symint(init, tspan, h, cruth3, acc)
 
 
 def ruth4(init, tspan, h, acc):
     """
-    Integrate using the acceleration acc using Ruth4.
+    Integrate using the acceleration acc using Ruth4 for separable Hamiltonians.
     """
     return symint(init, tspan, h, cruth4, acc)
 
 
 def leapfrog2(init, tspan, h, acc):
     """
-    Integrate using the acceleration acc using Leapfrog.
+    Integrate using the acceleration acc using Leapfrog for separable Hamiltonians.
     """
     return symint(init, tspan, h, cleapfrog, acc)
 
@@ -137,6 +137,6 @@ def leapfrog2(init, tspan, h, acc):
 def pseudoleapfrog(init, tspan, h, acc):
     """
     Integrate using the acceleration acc sing pseudo Leapfrog
-    in the sense of Candy, Rozmus.
+    for separable Hamiltonians in the sense of Candy, Rozmus.
     """
     return symint(init, tspan, h, cpseudoleapfrog, acc)

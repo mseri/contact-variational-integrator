@@ -20,21 +20,24 @@ def leapfrog(init, tspan, a, h):
 
 def ruth3(init, tspan, a, h):
     """
-    Integrate the damped oscillator with damping factor a using Ruth3.
+    Integrate the damped oscillator with damping factor a using Ruth3
+    for separable Hamiltonians.
     """
     return sym.ruth3(init, tspan, h, lambda x, p, t: -x-a*p)
 
 
 def ruth4(init, tspan, a, h):
     """
-    Integrate the damped oscillator with damping factor a using Ruth4.
+    Integrate the damped oscillator with damping factor a using Ruth4
+    for separable Hamiltonians.
     """
     return sym.ruth4(init, tspan, h, lambda x, p, t: -x-a*p)
 
 
 def leapfrog2(init, tspan, a, h):
     """
-    Integrate the damped oscillator with damping factor a using Leapfrog.
+    Integrate the damped oscillator with damping factor a using the
+    one step Leapfrog integrator for separable Hamiltonians.
     """
     return sym.leapfrog2(init, tspan, h, lambda x, p, t: -x-a*p)
 
@@ -42,7 +45,7 @@ def leapfrog2(init, tspan, a, h):
 def pseudoleapfrog(init, tspan, a, h):
     """
     Integrate the damped oscillator with damping factor a using pseudo Leapfrog
-    in the sense of Candy, Rozmus.
+    for separable Hamiltonians in the sense of Candy, Rozmus.
     """
     return sym.pseudoleapfrog(init, tspan, h, lambda x, p, t: -x-a*p)
 

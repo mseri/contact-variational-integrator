@@ -54,7 +54,8 @@ def leapfrog(init, tspan, a, beta, omega, h):
 ## implementation should not be relied upon for numerical comparisons
 def ruth3(init, tspan, a, beta, omega, h):
     """
-    Integrate the damped oscillator with damping factor a using Ruth3.
+    Integrate the damped oscillator with damping factor a using Ruth3
+    for separable Hamiltonians.
     """
     f = forcing(beta, omega)
     return sym.ruth3(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
@@ -62,7 +63,8 @@ def ruth3(init, tspan, a, beta, omega, h):
 
 def ruth4(init, tspan, a, beta, omega, h):
     """
-    Integrate the damped oscillator with damping factor a using Ruth4.
+    Integrate the damped oscillator with damping factor a using Ruth4
+    for separable Hamiltonians.
     """
     f = forcing(beta, omega)
     return sym.ruth4(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
@@ -70,7 +72,8 @@ def ruth4(init, tspan, a, beta, omega, h):
 
 def leapfrog2(init, tspan, a, beta, omega, h):
     """
-    Integrate the damped oscillator with damping factor a using Leapfrog.
+    Integrate the damped oscillator with damping factor a using Leapfrog
+    for separable Hamiltonians.
     """
     f = forcing(beta, omega)
     return sym.leapfrog2(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
@@ -79,7 +82,7 @@ def leapfrog2(init, tspan, a, beta, omega, h):
 def pseudoleapfrog(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using pseudo Leapfrog
-    in the sense of Candy, Rozmus.
+    for separable Hamiltonians in the sense of Candy, Rozmus.
     """
     f = forcing(beta, omega)
     return sym.pseudoleapfrog(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
