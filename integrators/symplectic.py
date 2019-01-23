@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.optimize as so
 
 from integrators.common import getsteps
 
@@ -23,7 +24,7 @@ def euler(init, tspan, h, acc):
 
 def leapfrog(init, tspan, h, acc):
     """
-    Leapfrog integrator.
+    Leapfrog integrator (for separable Hamiltonians).
     Defaults to the damped oscillator with damping factor a
     """
     steps = getsteps(tspan, h)
@@ -36,6 +37,29 @@ def leapfrog(init, tspan, h, acc):
         p, x = sol[i]
         xnew = x + h*p + hsq/2.0*acc(x, p, t0+i*h)
         pnew = p + h*(acc(x, p, t0+i*h)+acc(xnew, p, t0+(i+1)*h))/2.0
+        sol[i+1] = np.array((pnew, xnew))
+
+    return sol
+
+
+def leapfrog_implicit(init, tspan, h, acc):
+    """
+    Leapfrog integrator, general implicit form.
+    Defaults to the damped oscillator with damping factor a
+    """
+    steps = getsteps(tspan, h)
+    t0, _ = tspan
+
+    sol = np.empty([steps, 2], dtype=np.float64)
+    sol[0] = np.array(init)
+    for i in range(steps-1):
+        p, x = sol[i]
+        pint, _ = so.fsolve(
+            lambda pint: p - pint + h*acc(x, pint, t0+i*h)/2.0,
+            p
+        )
+        xnew = x + h*pint
+        pnew = pint + h*acc(xnew, pint, t0+(i+1)*h)/2.0
         sol[i+1] = np.array((pnew, xnew))
 
     return sol
