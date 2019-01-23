@@ -18,7 +18,7 @@ def contact(init, tspan, h, a, forcing):
         p, x = sol[i]
         xnew = (h-hsq*a)*p + (1.0-0.5*hsq)*x + 0.5*hsq*forcing(t0+h*i)
         pnew = (1.0-h*a)*p + 0.5*h*(
-            forcing(t0+h*i) + forcing(t0+h*(i+1)) - x -  xnew
+            forcing(t0+h*i) + forcing(t0+h*(i+1)) - x - xnew
         )
         sol[i+1] = np.array((pnew, xnew))
     return sol

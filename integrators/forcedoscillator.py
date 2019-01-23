@@ -21,6 +21,7 @@ def reference(a, beta, omega):
 
     return lambda t: prefactor*np.sin(omega*t + phi)
 
+
 def dreference(a, beta, omega):
     """
     Reference solution for damped oscilltor with sinusoidal forcing
@@ -38,7 +39,7 @@ def euler(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Symplectic Euler.
     """
-    f = forcing(beta,omega)
+    f = forcing(beta, omega)
     return sym.euler(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
@@ -46,7 +47,7 @@ def leapfrog(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Leapfrog.
     """
-    f = forcing(beta,omega)
+    f = forcing(beta, omega)
     return sym.leapfrog_implicit(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 ## The integrators below aer based on the separable Hamiltonian, so the
@@ -55,7 +56,7 @@ def ruth3(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Ruth3.
     """
-    f = forcing(beta,omega)
+    f = forcing(beta, omega)
     return sym.ruth3(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
@@ -63,7 +64,7 @@ def ruth4(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Ruth4.
     """
-    f = forcing(beta,omega)
+    f = forcing(beta, omega)
     return sym.ruth4(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
@@ -71,7 +72,7 @@ def leapfrog2(init, tspan, a, beta, omega, h):
     """
     Integrate the damped oscillator with damping factor a using Leapfrog.
     """
-    f = forcing(beta,omega)
+    f = forcing(beta, omega)
     return sym.leapfrog2(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
@@ -80,11 +81,11 @@ def pseudoleapfrog(init, tspan, a, beta, omega, h):
     Integrate the damped oscillator with damping factor a using pseudo Leapfrog
     in the sense of Candy, Rozmus.
     """
-    f = forcing(beta,omega)
+    f = forcing(beta, omega)
     return sym.pseudoleapfrog(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
 
-# Contact integrators
+# Contact integrators for system with forcing
 
 def contact(init, tspan, a, beta, omega, h):
     """
