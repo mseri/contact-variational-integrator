@@ -54,10 +54,10 @@ def leapfrog_implicit(init, tspan, h, acc):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        pint, _ = so.fsolve(
+        pint = so.fsolve(
             lambda pint: p - pint + h*acc(x, pint, t0+i*h)/2.0,
             p
-        )
+        )[0]
         xnew = x + h*pint
         pnew = pint + h*acc(xnew, pint, t0+(i+1)*h)/2.0
         sol[i+1] = np.array((pnew, xnew))
@@ -84,7 +84,7 @@ def symint_step(init, acc, h, coeffs):
 def symint(init, tspan, h, coeffs, acc):
     """
     General symplectic integrator with coefficients coeffs.
-    The parameter init contains the initial values for p and q; 
+    The parameter init contains the initial values for p and q;
     tspan contains the time span as a tuple; h is the time step;
     acc is the acceleration.
     """
