@@ -59,9 +59,6 @@ def leapfrog2(init, tspan, a, beta, omega, h):
     f = forcing(beta, omega)
     return sym.leapfrog(init, tspan, h, lambda x, p, t: -x-a*p+f(t))
 
-# The integrators below aer based on the separable Hamiltonian, so the
-# implementation should not be relied upon for numerical comparisons
-
 
 def ruth3(init, tspan, a, beta, omega, h):
     """
