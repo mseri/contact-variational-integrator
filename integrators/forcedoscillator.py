@@ -94,7 +94,7 @@ def contact(init, tspan, a, beta, omega, h):
     Integrate the damped oscillator with damping factor a
     using the first order contact variational integrator.
     """
-    return con.contact(init, tspan, h, a, forcing(beta, omega))
+    return con.contact(init, tspan, h, a, lambda x: x, forcing(beta, omega))
 
 
 def symcontact(init, tspan, a, beta, omega, h):
@@ -102,4 +102,4 @@ def symcontact(init, tspan, a, beta, omega, h):
     Integrate the damped oscillator with damping factor a
     using the second order contact variational integrator.
     """
-    return con.symcontact(init, tspan, h, a, forcing(beta, omega))
+    return con.symcontact(init, tspan, h, a, lambda x: x, forcing(beta, omega))

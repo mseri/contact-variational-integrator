@@ -3,7 +3,7 @@ import numpy as np
 from integrators.common import getsteps
 
 
-def contact(init, tspan, h, a, forcing):
+def contact(init, tspan, h, a, acc, forcing):
     """
     Integrate the damped oscillator with damping factor a
     using the first order contact variational integrator.
@@ -16,9 +16,9 @@ def contact(init, tspan, h, a, forcing):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        xnew = (h-hsq*a)*p + (1.0-0.5*hsq)*x + 0.5*hsq*forcing(t0+h*i)
+        xnew = x + (h-hsq*a)*p - 0.5*hsq*acc(x) + 0.5*hsq*forcing(t0+h*i)
         pnew = (1.0-h*a)*p + 0.5*h*(
-            forcing(t0+h*i) + forcing(t0+h*(i+1)) - x - xnew
+            forcing(t0+h*i) + forcing(t0+h*(i+1)) - acc(x) - acc(xnew)
         )
         sol[i+1] = np.array((pnew, xnew))
     return sol
@@ -45,7 +45,7 @@ def midpoint(init, tspan, h, a):
     return sol
 
 
-def symcontact(init, tspan, h, a, forcing):
+def symcontact(init, tspan, h, a, acc, forcing):
     """
     Integrate the damped oscillator with damping factor a
     using the second order contact variational integrator.
@@ -58,9 +58,9 @@ def symcontact(init, tspan, h, a, forcing):
     sol[0] = np.array(init)
     for i in range(steps-1):
         p, x = sol[i]
-        xnew = (h - 0.5*hsq*a)*p + (1.0-0.5*hsq)*x + 0.5*hsq*forcing(t0+h*i)
+        xnew = x + (h - 0.5*hsq*a)*p - 0.5*hsq*acc(x) + 0.5*hsq*forcing(t0+h*i)
         pnew = (1.0-0.5*h*a)/(1.0 + 0.5*h*a)*p + 0.5*h*(
-            forcing(t0+h*i) + forcing(t0+h*(i+1)) - x - xnew
+            forcing(t0+h*i) + forcing(t0+h*(i+1)) - acc(x) - acc(xnew)
         )/(1.0 + 0.5*h*a)
         sol[i+1] = np.array((pnew, xnew))
     return sol
