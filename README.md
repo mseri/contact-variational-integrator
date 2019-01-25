@@ -1,5 +1,7 @@
 # Simulation code for Vermeeren, Seri, Bravetti: Contact Variational Integrators
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mseri/contact-variational-integrator/master)
+
 The code can be run and adapted opening the `jupyter` notebook.
 It requires having `numpy` and `matplotlib` installed.
 
