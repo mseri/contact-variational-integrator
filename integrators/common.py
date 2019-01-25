@@ -11,6 +11,19 @@ def getsteps(tspan, h):
     return int(math.floor((t2-t1)/h))
 
 
+def relerr(ref, sol, shift=10.0):
+    """
+    Regularized relative error between the reference solution
+    and the approximation: abs((shift+sol)/(shift+ref)-1.0)
+
+    As the solutions that we are going to discuss have often a very
+    small magnitude, we shift the solutions from 0 to avoid division
+    by zero errors. We chose this function to emphasize the relative
+    size of the error compared to the solution.
+    """
+    return np.abs((shift+sol)/(shift+ref)-1.0)
+
+
 def rk4(init, tspan, a, h):
     """
     RungeKutta4 from matplotlib.pylab for the damped oscillator
