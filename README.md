@@ -2,13 +2,14 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mseri/contact-variational-integrator/master)
 
-The code can be run and adapted opening the `jupyter` notebook.
-It requires having `numpy` and `matplotlib` installed.
+The notebooks contain the code to generate the pictures used in the paper,
+these can additionally be found in the `img/` folder. The `integators` folder
+contains the implementations of all the algorithms tested. The notebooks can
+be run remotely via binder, clocking on the badge above, or locally by using
+`jupyter`, a recent version of `python`, `numpy` and `matplotlib` is required 
+(see `requirements.txt` for a compativle set of dependencies).
 
-The notebooks contains the code to generate the pictures used in the paper,
-these can additionally be found in the `img/` folder.
-
-The notebooks are:
+The available notebooks are:
 
 - `DampedOscillator.ipynb` and `DampedOscillatorWithForcing.ipynb` contain the code used to generate the pictures in the paper;
 
