@@ -2,7 +2,7 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mseri/contact-variational-integrator/master)
 
-The notebooks contain the code to generate the pictures used in the paper,
+The notebooks contain the code to generate the pictures used in the [paper](https://arxiv.org/abs/1902.00436),
 these can additionally be found in the `img/` folder. The `integators` folder
 contains the implementations of all the algorithms tested. The notebooks can
 be run remotely via binder, clocking on the badge above, or locally by using
