@@ -57,7 +57,7 @@ def rk4_forced(init, tspan, a, b, omega, h):
 #
 # D Martin de Diego and R Sato Martin de Almagro.
 # Variational order for forced Lagrangian systems. Nonlinearity, Volume 31, Number 8 (2018)
-def variational_noncontact(init, tspan, h, a, acc):
+def variational_noncontact(init, tspan, h, a, b, omega):
     """
     Integrate the damped oscillator with damping factor a
     using the second order variational integrator
@@ -66,6 +66,7 @@ def variational_noncontact(init, tspan, h, a, acc):
     Variational order for forced Lagrangian systems.
     Nonlinearity, Volume 31, Number 8 (2018)
     """
+    t0 = tspan[0]
     steps = getsteps(tspan, h)
     hsq = np.math.pow(h, 2)
 
@@ -74,6 +75,6 @@ def variational_noncontact(init, tspan, h, a, acc):
     for i in range(steps-1):
         p, x = sol[i]
         xnew = ((1-hsq/2)*x + h*p) / (1 + h*a/2)
-        pnew = p - h*(x+xnew)/2 - a*(xnew - x)/2
+        pnew = p - h*(x+xnew)/2 - a*(xnew - x)/2 + h*b*( np.sin(omega*(t0+h*i)) + np.sin(omega*(t0+h*i+h)) )/2
         sol[i+1] = np.array((pnew, xnew))
     return sol

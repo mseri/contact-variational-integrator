@@ -87,4 +87,4 @@ def variational_noncontact(init, tspan, a, h):
     Variational order for forced Lagrangian systems.
     Nonlinearity, Volume 31, Number 8 (2018).
     """
-    return com.variational_noncontact(init, tspan, h, a, lambda x: x)
+    return com.variational_noncontact(init, tspan, h, a, 0, 0)
