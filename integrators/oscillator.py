@@ -1,6 +1,7 @@
 import integrators.contact as con
 import integrators.symplectic as sym
 
+import integrators.common as com
 
 # Symplectic integrators
 
@@ -76,3 +77,14 @@ def symcontact(init, tspan, a, h):
     using the second order contact variational integrator.
     """
     return con.symcontact(init, tspan, h, a, lambda x: x, lambda t: 0)
+
+
+def variational_noncontact(init, tspan, a, h):
+    """
+    Integrate the damped oscillator with damping factor a
+    using the second order variational integrator from
+    D Martin de Diego and R Sato Martin de Almagro.
+    Variational order for forced Lagrangian systems.
+    Nonlinearity, Volume 31, Number 8 (2018).
+    """
+    return com.variational_noncontact(init, tspan, h, a, 0, 0)
