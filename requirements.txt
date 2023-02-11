@@ -4,7 +4,7 @@ ipython-genutils==0.2.0
 ipywidgets==6.0.0
 jupyter-client==5.2.2
 jupyter-console==5.2.0
-jupyter-core==4.4.0
+jupyter-core==4.11.2
 MarkupSafe==1.0
 matplotlib==3.0.2
 nbconvert==6.5.1
